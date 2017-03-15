@@ -1,0 +1,100 @@
+﻿@using Microsoft.Owin.Security
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="HospitalManager">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+    <title>HospitalManager</title>
+
+    <!-- Page styles -->
+    @Styles.Render("https://fonts.googleapis.com/icon?family=Material+Icons")
+    @Styles.Render("~/Content/materialize.min.css")
+    @Styles.Render("~/Content/styles.css")
+</head>
+
+<body>
+    <nav class="white" role="navigation">
+        <div class="nav-wrapper container">
+            <a href="@Url.RouteUrl(new {controller = "Home", action = "Index"})" id="logo-container" class="brand-logo">
+                <span>HospitalManager</span>
+            </a>
+            <ul class="right hide-on-med-and-down menu-link">
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    
+                    <li>
+                        @Html.ActionLink("Register", "Register", "Account")
+                    </li>
+    
+                    <li>
+                        @Html.ActionLink("Login", "Login", "Account")
+                    </li>
+                    <li>
+                        @{ var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes().ToList(); }
+    
+                        @using (Html.BeginForm("ExternalLogin", "Account"))
+                        {
+                            @Html.AntiForgeryToken()
+    
+                            <button type="submit" style="padding-top: 5px" class="btn-social btn-flat" id="@loginProviders.First().AuthenticationType"
+                                    name="provider" value="@loginProviders.First().AuthenticationType"
+                                    title="Log in using your @loginProviders.First().Caption" account>
+                                <img src="~/Content/Images/facebook.png" width="25" height="25"/>
+                            </button>
+    
+                        }
+                    </li>
+                }
+                else
+                {
+                    <span class="grey-text">Hello, @User.Identity.Name</span>
+                    if(User.IsInRole("doctor"))
+                    {
+                        <li class="right hide-on-med-and-down">
+                            @Html.ActionLink("Administartion", "AdminPage", "User")
+                        </li>
+                    }
+                    <li class="right hide-on-med-and-down">
+                        @Html.ActionLink("Logout", "Logout", "Account")
+                    </li>
+                }
+            </ul>
+        </div>
+    </nav>
+
+    @RenderBody()
+
+    <footer class="page-footer teal">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">Company Bio</h5>
+                    <p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
+
+                </div>
+                <div class="col l5 push-l1 s12">
+                    <h5 class="white-text">Connect</h5>
+                    <ul>
+                        <li><a class="white-text" href="https://www.facebook.com/Alex.budyanskiy">Oleksii Budianskyi</a></li>
+                        <li><a class="white-text" href="https://www.facebook.com/sergey.iordanov">Serhii Iordanov</a></li>
+                        <li><a class="white-text" href="https://www.linkedin.com/in/yevgeniy-tkachenko-8a07a0136/">Yevgeniy Tkachenko</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                Made by <a class="brown-text text-lighten-3" href="http://nure.ua">NURE Students</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Page scripts -->
+    @Scripts.Render("~/Scripts/jquery-3.1.1.min.js")
+    @Scripts.Render("~/Scripts/materialize.min.js")
+    @Scripts.Render("~/bundles/init")
+</body>
+</html>

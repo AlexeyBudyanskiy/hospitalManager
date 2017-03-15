@@ -1,0 +1,71 @@
+﻿@model HospitalManager.WEB.ViewModels.UserPageViewModel
+@{
+    ViewBag.Title = "User page";
+}
+
+<div class="row container" style="margin-bottom: 450px">
+    <div class="col s12 m6">
+        <p class="flow-text center">Client profile</p>
+        <hr/>
+        <p>Name: @Model.ClientProfile.Name</p>
+        <p>Email: @Model.ClientProfile.Email</p>
+        <p>Address: @Model.ClientProfile.Address</p>
+        <p>Age: @Model.ClientProfile.Age</p>
+        <p>Gender: @Model.ClientProfile.Gender.ToString()</p>
+    </div>
+    <div class="col s12 m6">
+        <p class="flow-text center">Payments</p>
+        <hr />
+        <table class="striped">
+            <tr>
+                <th>#</th>
+                <th>Sum</th>
+                <th>Currency</th>
+                <th>Status</th>
+                <th>Details</th>
+            </tr>
+
+            @foreach (var payment in Model.Payments)
+            {
+                <tr>
+                    <td>@payment.Id</td>
+                    <td>@payment.Sum</td>
+                    <td>@payment.Currency</td>
+                    <td>@payment.Status.ToString()</td>
+                    <td>@payment.Details</td>
+                </tr>
+            }
+        </table>
+        <a class="waves-effect waves-light btn center" href="@Url.Action("Pay", "Payment")">Add payment</a>
+    </div>
+    <div class="col s12 m6">
+        <p class="flow-text center">Artifacts</p>
+        <hr />
+        <table class="striped">
+            <tr>
+                <th>#</th>
+                <th>Description</th>
+                <th>Artifact</th>
+                <th class="center"><i class="material-icons"></i></th>
+            </tr>
+
+            @foreach(var artifact in Model.Artifacts)
+            {
+                <tr>
+                    <td>
+                        @artifact.Id
+                    </td>
+                    <td>@artifact.Description</td>
+                    <td>
+                        <img src="@Url.Action("GetArtifactBytes", "Artifact", new { id = artifact.Id })" height="50" width="50" alt="artifact"/>
+                    </td>
+                    <td>
+                        <a class="waves-effect waves-light btn-flat center" href="@Url.Action("Delete", "Artifact", new { id = artifact.Id })"><i class="material-icons">delete</i></a>
+                        <a class="waves-effect waves-light btn-flat center" href="@Url.Action("Download", "Artifact", new { id = artifact.Id })"><i class="material-icons">file_download</i></a>
+                    </td>
+                </tr>
+            }
+        </table>
+        <a class="waves-effect waves-light btn center" href="@Url.Action("Create", "Artifact")">Add artifact</a>
+    </div>
+</div>
